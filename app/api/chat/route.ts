@@ -32,7 +32,8 @@ export async function POST(request: NextRequest) {
   if (!messages.length) return Response.json({ error: "No valid messages were provided." }, { status: 400 });
 
   const endpoint = process.env.XGPT10_BASE_URL || "https://xgpt10.ai.studio/api/v1/chat/completions";
-  // This app is Gemini-only. Do not let an old Vercel XGPT10_PROVIDER=groq\n  // setting silently route Gemini model IDs through Groq.\n  const provider = "gemini";
+  // This app is Gemini-only. Ignore any stale Vercel provider override.
+  const provider = "gemini";
 
   try {
     const upstream = await fetch(endpoint, {
@@ -45,7 +46,10 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify({
         provider,
         model: body.model,
-        messages,
+        messages: [
+          { role: "system", content: "You are a real conversational AI assistant. Answer the user directly and naturally. Do not produce fake execution reports, model-routing summaries, provider metadata, or canned template responses unless the user explicitly asks for technical diagnostics." },
+          ...messages
+        ],
         temperature: 0.7,
         stream: true
       }),
