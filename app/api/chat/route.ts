@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
   if (!messages.length) return Response.json({ error: "No valid messages were provided." }, { status: 400 });
 
   const endpoint = process.env.XGPT10_BASE_URL || "https://xgpt10.ai.studio/api/v1/chat/completions";
-  const provider = process.env.XGPT10_PROVIDER || "gemini";
+  // This app is Gemini-only. Do not let an old Vercel XGPT10_PROVIDER=groq\n  // setting silently route Gemini model IDs through Groq.\n  const provider = "gemini";
 
   try {
     const upstream = await fetch(endpoint, {
