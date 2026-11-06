@@ -1,12 +1,12 @@
 # Nova AI Chat
 
-A Next.js streaming AI chat application powered by the xGPT10 chat-completions endpoint.
+A Next.js streaming AI chat application using the xGPT10 API Hub with the Gemini provider.
 
 ## Features
 
-- Three selectable model IDs: `gemini-3.8-flash`, `gemini-3.1-flash-lite`, and `gemini-4-argon`
+- Gemini provider selection with the requested model IDs: `gemini-3.8-flash`, `gemini-3.1-flash-lite`, and `gemini-4-argon`
 - Server-side API proxy; the API key is never sent to the browser
-- Streaming chat-completions response handling
+- Streaming chat-completions response passthrough
 - Multiple conversations, delete/new chat, Markdown and GFM rendering
 - Responsive dark interface
 - Local browser chat history
@@ -23,18 +23,18 @@ A Next.js streaming AI chat application powered by the xGPT10 chat-completions e
 Set these in Project Settings → Environment Variables:
 
 - `XGPT10_API_KEY` — your private xGPT10 API Hub key
-- `XGPT10_BASE_URL` — optional; defaults to `https://xgpt10.ai.studio/api/v1/chat/completions`
-- `XGPT10_PROVIDER` — optional; defaults to `groq` because that is the provider in the supplied sample request
+- `XGPT10_BASE_URL` — defaults to `https://xgpt10.ai.studio/api/v1/chat/completions`
+- `XGPT10_PROVIDER` — defaults to `gemini`
 
 Never commit a real API key to GitHub or expose it in client-side code.
 
-## Important provider/model check
+## Provider compatibility note
 
-The supplied xGPT10 example uses `provider: "groq"`, while the requested model IDs are Gemini-named. This app sends the selected model ID and configured provider as supplied, but the exact provider/model compatibility must be confirmed against xGPT10's current API documentation or account. If xGPT10 expects a different provider for these Gemini IDs, change `XGPT10_PROVIDER` in Vercel.
+The app now sends `provider: "gemini"` and the selected Gemini model ID to the supplied xGPT10 chat-completions endpoint. The xGPT10 example provided earlier showed `provider: "groq"`; a public xGPT10 specification confirming the Gemini provider identifier and the availability of these exact model IDs was not found during this update. Confirm the accepted provider/model names in your xGPT10 dashboard or documentation. If xGPT10 uses a different exact identifier, set `XGPT10_PROVIDER` accordingly in Vercel. The application surfaces upstream errors rather than fabricating responses.
 
 ## Persistence
 
-Conversation history is stored in the current browser using localStorage. Supabase cloud sync is not enabled in this initial version because project URL and anon key have not been provided. Do not place a Supabase service-role key in the browser.
+Conversation history is stored in the current browser using localStorage. Supabase cloud sync is not configured in this version.
 
 ## Deployment
 
