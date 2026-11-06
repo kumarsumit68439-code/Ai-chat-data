@@ -30,7 +30,7 @@ Never commit a real API key to GitHub or expose it in client-side code.
 
 ## Provider compatibility note
 
-The app now sends `provider: "gemini"` and the selected Gemini model ID to the supplied xGPT10 chat-completions endpoint. The xGPT10 example provided earlier showed `provider: "groq"`; a public xGPT10 specification confirming the Gemini provider identifier and the availability of these exact model IDs was not found during this update. Confirm the accepted provider/model names in your xGPT10 dashboard or documentation. If xGPT10 uses a different exact identifier, set `XGPT10_PROVIDER` accordingly in Vercel. The application surfaces upstream errors rather than fabricating responses.
+The server now hard-codes `provider: "gemini"` so an old `XGPT10_PROVIDER=groq` Vercel variable cannot silently route Gemini model IDs through Groq. It also adds a conversational system instruction to discourage gateway-style execution summaries. The app still depends on xGPT10 actually mapping the selected model IDs to live Gemini models; if the gateway itself returns canned text, that must be corrected by the gateway/provider configuration. The application does not manufacture an AI answer.
 
 ## Persistence
 
